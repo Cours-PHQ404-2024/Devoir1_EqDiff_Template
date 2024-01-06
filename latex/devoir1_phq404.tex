@@ -1,0 +1,179 @@
+\documentclass[12pt, letterpaper]{article}
+
+\usepackage{amsmath, amssymb}
+\usepackage{physics}
+\usepackage[french]{babel}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+\usepackage{caption}
+
+\begin{document}
+
+\title{Devoir 1 : Équations différentielles ordinaires}
+\author{PHQ404}
+\date{8 février 2024}
+\maketitle
+
+\section{Objectif}\label{sec:objectif}
+
+\noindent L'objectif de ce devoir est d'implanter plusieurs méthodes de solution
+d'équations différentielles en Python 
+et de les appliquer au problème de Kepler,
+soit le mouvement d'un point soumis à une force attractive 
+en inverse du carré de la distance.
+
+
+\section{Comment présenter et remettre votre TP}\label{sec:comment-presenter-et-remettre-votre-tp}
+
+\noindent Vous devez cloner le répertoire github dans l'organisation du cours au lien suivant :
+\href{https://classroom.github.com/a/4PhLRaKv}{https://classroom.github.com/a/4PhLRaKv}.
+Dans ce répertoire se trouvera votre code python, vos tests unitaires ainsi que votre rapport
+décrivant les méthodes utilisés et l'analyse de vos résultats.
+La structure des fichiers ne doit pas être modifiée, mais vous pouvez ajouter des fichiers si vous le désirez.
+Voici la structure de fichiers que votre répertoire devra garder :
+
+\bigskip
+
+Root
+\begin{itemize}
+    \item[]
+        \begin{itemize}
+            \item[$\rightarrow$] src
+                \begin{itemize}
+                    \item[$\hookrightarrow$] \texttt{fichier0.py}
+                    \item[$\hookrightarrow$] \texttt{fichier1.py}
+                    \item[$\hookrightarrow$] \dots
+              \end{itemize}
+        \end{itemize}
+  \item[]
+  \begin{itemize}
+    \item[$\rightarrow$] tests
+    \begin{itemize}
+      \item[$\hookrightarrow$] \texttt{test\_fichier0.py}
+      \item[$\hookrightarrow$] \texttt{test\_fichier1.py}
+      \item[$\hookrightarrow$] \dots
+    \end{itemize}
+  \end{itemize}
+  \item[$\hookrightarrow$] \texttt{.gitignore}
+  \item[$\hookrightarrow$] \texttt{requirements.txt}
+  \item[$\hookrightarrow$] \texttt{README.md}
+  \item[$\hookrightarrow$] \texttt{rapport\_devoir\emph{i}-\emph{vos\_noms}.pdf}
+\end{itemize}
+
+\bigskip
+
+\noindent Le fichier \texttt{requirements.txt} doit contenir les dépendances de votre projet.
+Le fichier \\\texttt{README.md} doit contenir les instructions pour installer et utiliser votre projet ainsi
+qu'une brève description du devoir et des méthodes utilisés dans le code.
+Le fichier \\\texttt{rapport\_devoir\emph{i}-\emph{vos\_noms}.pdf} doit contenir votre rapport en format pdf.
+L'utilisation de \LaTeX\ est fortement recommandée pour la rédaction de votre rapport.
+Dans le dossier \texttt{src} se trouvera votre code python et dans le dossier \texttt{tests} se trouvera vos tests
+unitaires.
+
+\bigskip
+
+\noindent La remise et la correction automatique du code se fera à chaque \texttt{push} sur le répertoire github.
+Notez que seul le dernier \texttt{push} sera considéré pour la correction.
+
+
+\section{Énoncé}\label{sec:enonce}
+
+\subsection{Implémentation}\label{subsec:implementation}
+
+\noindent Dans le fichier \texttt{src/solvers.py}, vous devez implementer les fonctions suivantes pour résoudre une
+équation différentielle ordinaire tout en conservant le même nom que ceux affichés ici-bas :
+\begin{enumerate}
+  \item \texttt{euler} pour la méthode d'Euler,
+  \item \texttt{pred\_corr} pour la méthode du prédicteur-correcteur,
+  \item \texttt{rk2} pour la méthode de Runge-Kutta d'ordre 2,
+  \item \texttt{rk4} pour la méthode de Runge-Kutta d'ordre 4,
+  \item \texttt{scipy\_int} pour la bibliothèque scipy
+  (nous vous laissons regarder la documentation pour trouver une telle fonction). 
+\end{enumerate}
+
+\bigskip
+
+\noindent Les \href{https://python-forge.readthedocs.io/en/latest/signature.html}{signatures} des fonctions doivent
+respecter la suivante :
+\begin{verbatim}
+def solver_func(
+        func: Callable[
+            [Union[numbers.Number, np.ndarray], numbers.Number, Any], float
+        ],
+        y0: Union[numbers.Number, np.ndarray],
+        time_steps: Union[numbers.Number, np.ndarray],
+        *args,
+        **kwargs
+) -> np.ndarray
+\end{verbatim}
+
+\bigskip
+
+\noindent Dans le fichier \texttt{src/systems.py}, vous devez implementer les fonctions suivantes pour décrire un
+système d'équations différentielles ordinaires :
+\begin{enumerate}
+  \item \texttt{kepler} pour le problème de Kepler.
+\end{enumerate}
+
+\bigskip
+
+\noindent Les \href{https://python-forge.readthedocs.io/en/latest/signature.html}{signatures} des fonctions doivent
+respecter la suivante :
+\begin{verbatim}
+def system_func(
+        y: Union[numbers.Number, np.ndarray],
+        t: numbers.Number,
+) -> np.ndarray
+\end{verbatim}
+
+\noindent Veuillez lire la documentation de chacune des méthodes pour comprendre les arguments.
+
+\bigskip
+
+\noindent Note: Toutes les fonctions qui doivent être implémentées sont déjà définies dans les fichiers
+et retournent des \texttt{NotImplementedError}.
+
+\subsection{Vérification}\label{subsec:verification}
+
+Il est important de vérifer vos implémentations.
+En effet, vous devez vous assurer que vos méthodes fonctionnent correctement et pour ce faire, vous devez rouler et
+implémenter des tests unitaires qui testent chacune de vos classes et fonctions.
+De plus, vous devriez tester si les résultats obtenus sont logiques.
+Une façon de le faire, est d'appliquer vos méthodes à un système que vous pouvez résoudre analytiquement.
+Par exemple, vous pouvez vérifier que vos fonctions retournent un résultat raisonnable pour un oscillateur harmonique en
+2 dimensions, un projectile ou tout autre système simple.
+Il serait aussi intéressant de retrouver ce type de vérification dans votre rapport.
+Il est fortement recommandé d'ajouter des tests unitaires dans le dossier \texttt{tests}, mais les tests déjà
+implémentés ne doivent pas être modifiés.
+
+\subsection{Application au problème de Kepler}\label{subsec:application-au-probleme-de-kepler}
+
+Supposez une particule de masse unité dans un espace en 2 dimensions soumise à une force attractive
+\begin{align}
+  \vb{f}(\vb r) = -\frac{1}{|\vb r|^2}.
+\end{align}
+
+Utilisez les quatre méthodes que vous avez implémentées pour résoudre ce système.
+Ensuite, pour chacune des méthodes, 
+tracer un graphique avec la position $x$ sur l'axe horizontal
+et la position $z$ sur l'axe vertical.
+Vous devez utiliser les conditions initiales suivantes:
+\begin{align}
+  &\vb{r_0} = (1.0, 0.0),
+  &\vb{\dot{r}_0} = (0.0, 0.5).
+\end{align}
+De plus, le domaine d'intégration doit couvrir les temps de 0 
+à 10 avec environ 2000 pas de temps.
+
+
+\section{Critères d'évaluation}\label{sec:criteres-d'evaluation}
+
+\begin{description}
+  \item[70 points] Pour le résultat de vos tests unitaires.
+  \item[30 points] Pour la qualité du rapport.
+\end{description}
+
+
+\end{document}
