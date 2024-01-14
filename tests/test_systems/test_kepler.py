@@ -1,12 +1,10 @@
 import pytest
 import numpy as np
 import pickle
+import os
 from src.systems import kepler
 
-try:
-    kepler_data = pickle.load(open("tests/test_data/kepler.pkl", "rb"))
-except FileNotFoundError:
-    kepler_data = pickle.load(open("../test_data/kepler.pkl", "rb"))
+kepler_data = pickle.load(open(os.path.join(os.path.dirname(__file__), "..", "test_data", "kepler.pkl"), "rb"))
 
 
 @pytest.mark.parametrize(
