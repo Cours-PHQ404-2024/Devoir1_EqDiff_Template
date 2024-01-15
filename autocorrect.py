@@ -1,31 +1,71 @@
+from typing import Optional
+
 import tac
 import os
 
 
-def auto_correct():
-    path_to_root = os.path.join(".")
-    code_source = tac.SourceCode(os.path.join(path_to_root, "src"), logging_func=print)
-    tests_source = tac.SourceTests(os.path.join(path_to_root, "tests"), logging_func=print)
+def get_report_from_url(
+        repo_url: Optional[str] = None,
+        master_repo_url: Optional[str] = None,
+        path_to_root=".",
+        weights=None,
+):
+    code_source = tac.SourceCode(os.path.join(path_to_root, "src"), url=repo_url, logging_func=print)
+    tests_source = tac.SourceTests(os.path.join(path_to_root, "tests"), url=repo_url, logging_func=print)
+    if master_repo_url is None:
+        master_code_source, master_tests_source = None, None
+    else:
+        master_code_source = tac.SourceMasterCode(
+            os.path.join(path_to_root, "src"), url=master_repo_url,
+            logging_func=print, local_repo_tmp_dirname="tmp_master_repo"
+        )
+        master_tests_source = tac.SourceMasterTests(
+            os.path.join(path_to_root, "tests"), url=master_repo_url,
+            logging_func=print, local_repo_tmp_dirname="tmp_master_repo"
+        )
+    default_weights = {
+        tac.Tester.PEP8_KEY: 50.0,
+        tac.Tester.PERCENT_PASSED_KEY: 0.0,
+        tac.Tester.CODE_COVERAGE_KEY: 0.0,
+        tac.Tester.MASTER_PERCENT_PASSED_KEY: 50.0,
+    }
+    if weights is None:
+        weights = {}
+    weights = {**default_weights, **weights}
+
     auto_corrector = tac.Tester(
         code_source, tests_source,
-        report_dir="report_dir",
+        master_code_src=master_code_source,
+        master_tests_src=master_tests_source,
+        report_dir="tmp_report_dir",
         logging_func=print,
-        weights={
-            tac.Tester.PEP8_KEY: 10.0,
-            tac.Tester.PERCENT_PASSED_KEY: 10.0,
-            tac.Tester.CODE_COVERAGE_KEY: 20.0,
-            tac.Tester.MASTER_PERCENT_PASSED_KEY: 30.0,
-        },
+        weights=weights,
     )
-    auto_corrector.run(overwrite=False, clear_pytest_temporary_files=True)
-    print(auto_corrector.report)
-    auto_corrector.push_report_to("auto")
+    auto_corrector.run(
+        overwrite=False,
+        debug=True,
+        clear_temporary_files=False,
+        clear_pytest_temporary_files=False,
+    )
     auto_corrector.rm_report_dir()
+    return auto_corrector.report
+
+
+def get_grade_report():
+    template_url = r"https://github.com/Cours-PHQ404-2024/Devoir1_EqDiff_Template"
+    base_grade = get_report_from_url(repo_url=template_url, master_repo_url=template_url).grade
+    report = get_report_from_url(repo_url=None, master_repo_url=template_url)
+    new_report = tac.Report(
+        data=report.data,
+        grade_min=base_grade,
+        grade_min_value=50.0,
+        grade_max=100.0,
+        report_filepath=os.path.join(os.path.dirname(__file__), "grade_report.json"),
+    )
+    print(new_report)
+    new_report.save()
+    return new_report
 
 
 if __name__ == "__main__":
-    auto_correct()
-    # or run the following command in the terminal:
-    # python -m tac --code-src-path="src" --tests-src-path="tests" --push_report_to="auto"
-    # --code_coverage-weight=20 --percent_passed-weight=10 --PEP8-weight=10 --master_percent_passed-weight=30
-    # --rm-report-dir --overwrite --debug
+    get_grade_report()
