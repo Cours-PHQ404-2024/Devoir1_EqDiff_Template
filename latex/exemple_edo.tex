@@ -1,0 +1,112 @@
+%! Author = gince
+%! Date = 1/18/2024
+
+% Preamble
+\documentclass[11pt]{article}
+
+% Packages
+\usepackage{amsmath, amssymb}
+\usepackage{physics}
+\usepackage[french]{babel}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+\usepackage{caption}
+% Document
+\begin{document}
+
+\section*{Modélisation du Mouvement d'une Particule dans un Plan sous l'Influence d'une Force de Linéaire}
+\label{sec:modele}
+
+
+\noindent Considérons le mouvement d'une particule de masse \(m\) dans un espace en deux dimensions sous l'influence
+d'une force de rappel linéaire.
+
+\bigskip
+
+\noindent La force appliquée sur la particule est donnée par:
+
+\[
+\mathbf{f}(\mathbf{r}) = -k \mathbf{r}
+\]
+
+\noindent où \(\mathbf{r} = (x, y)\) est le vecteur position de la particule et \(k\) est la constante de raideur.
+
+\bigskip
+
+\noindent La force de rappel linéaire est une force restauratrice qui est proportionnelle à la position de la particule et
+dirigée vers l'origine.
+En d'autres termes, plus la particule s'éloigne de l'origine, plus la force de rappel est forte,
+et elle est dirigée vers l'origine.
+
+\bigskip
+
+\noindent La deuxième loi de Newton pour cette force est formulée comme une équation vectorielle du second ordre:
+
+\[
+m \frac{d^2\mathbf{r}}{dt^2} = \mathbf{f}(\mathbf{r})
+\]
+
+\noindent En supposant une masse unitaire (\(m = 1\)), cette équation se simplifie à:
+
+\[
+\frac{d^2\mathbf{r}}{dt^2} = -k \mathbf{r}
+\]
+
+\noindent Cette équation vectorielle peut être décomposée en deux équations différentielles couplées, une pour chaque
+composante de \(\mathbf{r} = (x, y)\).
+En effet,
+
+\begin{align*}
+    \mathbf{r} &= \mqty(x \\ y) \\
+    \frac{d\mathbf{r}}{dt} &= \mqty(\frac{dx}{dt} \\ \frac{dy}{dt}) \\
+    \frac{d^2\mathbf{r}}{dt^2} &= \mqty(\frac{d^2x}{dt^2} \\ \frac{d^2y}{dt^2})
+\end{align*}
+
+\noindent et puisque
+
+\begin{align*}
+    \mathbf{f}(\mathbf{r}) &= -k \mqty(x \\ y) \\
+    \frac{d\mathbf{f}}{dt} &= -k\mqty(\frac{dx}{dt} \\ \frac{dy}{dt}) \\
+    \frac{d^2\mathbf{f}}{dt^2} &= -k\mqty(\frac{d^2x}{dt^2} \\ \frac{d^2y}{dt^2})
+\end{align*}
+
+\noindent donc plus explicitement, on obtient:
+
+\[
+\begin{align*}
+\frac{d^2x}{dt^2} &= -k x, \\
+\frac{d^2y}{dt^2} &= -k y.
+\end{align*}
+\]
+
+\noindent Ces équations décrivent comment les positions \(x\) et \(y\) de la particule évoluent au fil du temps sous
+l'influence de la force de rappel linéaire.
+
+\bigskip
+
+\noindent Maintenant, pour décrire l'évolution du système, on peut utiliser un vecteur
+d'état \(\mathbf{v} = [x, y, v_x, v_y]\), où \(v_x\) et \(v_y\) sont les composantes de la vitesse dans les
+directions \(x\) et \(y\) respectivement.
+Les dérivées de ce vecteur d'état par rapport au temps sont données par:
+
+\[
+\begin{align*}
+\frac{dx}{dt} &= v_x, \\
+\frac{dv_x}{dt} &= -k x, \\
+\\
+\frac{dy}{dt} &= v_y, \\
+\frac{dv_y}{dt} &= -k y.
+\end{align*}
+\]
+
+\noindent Ces équations décrivent comment les composantes du vecteur d'état évoluent au fil du temps, fournissant une
+description complète du mouvement de la particule sous l'influence de la force de rappel linéaire.
+Finalement, vous pouvez remarquer quant utilisant le vecteur d'état, on a réduit le système d'équations différentielles
+d'ordre deux à un système d'équations différentielles d'ordre un.
+
+
+
+
+\end{document}
